@@ -69,6 +69,14 @@ void MainWindow::on_actionNew_triggered()
               // should never be reached
               break;
         }
+    }else{
+
+        currentFile.clear();
+        ui->textEdit->setText(QString());
+
+        ui->statusBar->showMessage("New File");
+        textChanged = false;
+        isNewFile = true;
     }
 
 }
@@ -130,6 +138,7 @@ void MainWindow::on_actionOpen_triggered()
             return;
         }
 
+
         setWindowTitle(fileName);
         QTextStream in(&file);
         QString text = in.readAll();
@@ -147,8 +156,9 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, "Save as ");
+    QString fileName = QFileDialog::getSaveFileName(this, "Save as ", "New file", tr("Text files (*.txt);;All files ( *.*)"));
     QFile file(fileName);
+
 
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
 
@@ -156,7 +166,7 @@ void MainWindow::on_actionSave_As_triggered()
         return;
     }
 
-    currentFile = fileName;
+    currentFile = fileName ;//+ ".txt";
     setWindowTitle(fileName);
     QTextStream out(&file);
     QString text = ui->textEdit->toPlainText();
